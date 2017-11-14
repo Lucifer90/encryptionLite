@@ -142,10 +142,10 @@
                             <outfile>${project.basedir}/compilation/EncryptionTool.exe</outfile>
                             <jar>${project.build.directory}/crypting.jar</jar>
                             <errTitle>App Err</errTitle>
+                            <icon>${project.build.outputDirectory}/baseicon.ico</icon>
                             <classPath>
                                 <mainClass>it.fanciullini.crypting.controller.GraphicUserInterface</mainClass>
                             </classPath>
-                            <icon>${project.build.outputDirectory}/pika.ico</icon>
                             <jre>
                                 <path>/compilation/bin/jre1.8.0_111</path>
                                 <!--bundledJre64Bit>true</bundledJre64Bit-->
