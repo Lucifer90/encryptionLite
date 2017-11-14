@@ -156,7 +156,7 @@ public class GraphicUserInterface extends JPanel {
         setDimension(pathSelectedFile, new Dimension(300, 10));
 
         logBox = new JTextArea(10, 20);
-        logBox.setText(Costanti.howTo_ITA);
+        logBox.setText(Costanti.howTo_ita);
         logBox.setEditable(false);
         logBox.setBackground(Color.WHITE);
     }
@@ -335,12 +335,11 @@ public class GraphicUserInterface extends JPanel {
                         toret = Costanti.newLine;
                         toret += Costanti.decryptSuccess;
                     } else {
-                        //separa toencrypt in path-file, replace solo file e rimergia
-                        try {
+                        /*try {
                             workingFilePath = createWorkingDirectory(workingFilePath);
                         } catch (IOException ioex) {
                             return;
-                        }
+                        }*/
                         justDecrypt(workingFilePath, pathSelectedJson.getText().trim());
                         toret = Costanti.newLine;
                         toret += Costanti.decryptSuccess;

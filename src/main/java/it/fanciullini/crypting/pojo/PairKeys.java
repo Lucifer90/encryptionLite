@@ -66,7 +66,7 @@ public class PairKeys {
         JSONParser parser = new JSONParser();
 
         try {
-            FileReader fileReader = new FileReader(Paths.get(path, Costanti.keysFilename).toString());
+            FileReader fileReader = new FileReader(Paths.get(path).toString());
             Object obj = parser.parse(fileReader);
             fileReader.close();
             JSONObject jsonObject = (JSONObject) obj;

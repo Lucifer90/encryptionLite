@@ -12,10 +12,14 @@ public class PathConverter
         String path = tmp.getParent();
         String filename = tmp.getName();
         //String filename = tmp.getName().replace(original, substitute);
-        int index = filename.lastIndexOf(original);
-        if( index>=0 )
-            filename = new StringBuilder(filename).replace(index, index+1,substitute).toString();
-        String encrypted = Paths.get(path, filename).toString();
-        return encrypted;
+        if (original.equalsIgnoreCase(Costanti.dot)) {
+            int index = filename.lastIndexOf(original);
+            if (index >= 0) {
+                filename = new StringBuilder(filename).replace(index, index + 1, substitute).toString();
+            }
+        }else {
+            filename = filename.replace(original, substitute);
+        }
+        return Paths.get(path, filename).toString();
     }
 }
