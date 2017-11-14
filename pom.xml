@@ -139,7 +139,7 @@
                         </goals>
                         <configuration>
                             <headerType>gui</headerType>
-                            <outfile>${project.basedir}/compilation/EncryptionTool.exe</outfile>
+                            <outfile>${project.basedir}/EncryptionLite/EncryptionTool.exe</outfile>
                             <jar>${project.build.directory}/crypting.jar</jar>
                             <errTitle>App Err</errTitle>
                             <icon>${project.build.outputDirectory}/baseicon.ico</icon>
@@ -147,7 +147,7 @@
                                 <mainClass>it.fanciullini.crypting.controller.GraphicUserInterface</mainClass>
                             </classPath>
                             <jre>
-                                <path>/compilation/bin/jre1.8.0_111</path>
+                                <path>/EncryptionLite/bin/jre1.8.0_111</path>
                                 <!--bundledJre64Bit>true</bundledJre64Bit-->
                                 <minVersion>1.7.0_000</minVersion>
                                 <initialHeapSize>128</initialHeapSize>
