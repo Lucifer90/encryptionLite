@@ -8,9 +8,12 @@ import javax.crypto.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.security.*;
+import java.sql.Timestamp;
 
 import static it.fanciullini.crypting.utils.PathConverter.convertPath;
 
@@ -52,6 +55,20 @@ public class Cryptography
         return passwordGenerator.nextString();
     }
 
+    public static String createWorkingDirectory(String originalPath)
+        throws IOException
+    {
+        java.sql.Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        Long timeValue = timestamp.getTime();
+        Path requestedPath = Paths.get(originalPath);
+        String workingFolder = requestedPath.getFileName()+"_"+timeValue;
+        File destinationFolder = new File(Paths.get(requestedPath.getParent().toString(), workingFolder).toString());
+        destinationFolder.mkdirs();
+        Path destinationFile = Paths.get(destinationFolder.toString(), requestedPath.getFileName().toString());
+        Files.copy(requestedPath, destinationFile, StandardCopyOption.REPLACE_EXISTING);
+        return destinationFile.toString();
+    }
+
     @Deprecated
     private void encryptSafeWord(String safeWorld)
             throws NoSuchAlgorithmException, NoSuchPaddingException, NoSuchProviderException, IllegalBlockSizeException,
@@ -65,12 +82,18 @@ public class Cryptography
 
     public static void encryptAndDecrypt(String toEncrypt){
         //separa toencrypt in path-file, replace solo file e rimergia
+        try {
+            toEncrypt = createWorkingDirectory(toEncrypt);
+        } catch (IOException ioex) {
+            return;
+        }
         String encrypted = convertPath(toEncrypt, Costanti.dot, Costanti.encryptedSpecial);
         PairKeys pk = justEncrypt(toEncrypt);
         justDecrypt(encrypted, pk.getSafeWordEncrypted(), java.util.Base64.getEncoder().encodeToString(pk.getPublicKey().getEncoded()));
     }
 
     public static PairKeys justEncrypt(String toEncrypt){
+        //separa toencrypt in path-file, replace solo file e rimergia
         PairKeys pk = null;
         String parentFolder = new File(toEncrypt).getParent();
         try {
@@ -94,12 +117,25 @@ public class Cryptography
         }
     }
 
+    public static void justDecrypt(String toDecrypt, String customJsonPath){
+        PairKeys pk = new PairKeys();
+        File decrypted = new File(toDecrypt);
+        String parentFolder = decrypted.getParent();
+        try {
+            pk.fromFile(customJsonPath);
+            decrypt(pk.getSafeWordEncrypted(), pk.getPublicKey(), decrypted);
+            System.out.println(pk.toString());
+        } catch (GeneralSecurityException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void justDecrypt(String toDecrypt){
         PairKeys pk = new PairKeys();
         File decrypted = new File(toDecrypt);
         String parentFolder = decrypted.getParent();
         try {
-            pk.fromFile(parentFolder);
+            pk.fromFile(Paths.get(parentFolder, Costanti.keysFilename).toString());
             decrypt(pk.getSafeWordEncrypted(), pk.getPublicKey(), decrypted);
             System.out.println(pk.toString());
         } catch (GeneralSecurityException | IOException e) {
